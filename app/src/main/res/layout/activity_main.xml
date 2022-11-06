@@ -22,6 +22,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
+            android:id="@+id/btn_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cerrar Sesión" />
+
+        <Button
             android:id="@+id/btn_agregar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
