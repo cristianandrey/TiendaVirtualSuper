@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Acepte los Terminos", Toast.LENGTH_SHORT).show();
                 } else {
                     if (nameUser.isEmpty() || emailUser.isEmpty() || passwordUser.isEmpty()) {
-                        Toast.makeText(RegisterActivity.this, "Datos Incompletos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Datos Incompletos!", Toast.LENGTH_SHORT).show();
                     } else {
                         registerUser(nameUser, emailUser, passwordUser);
                     }
