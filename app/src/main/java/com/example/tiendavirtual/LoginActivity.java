@@ -21,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
     EditText email, password;
-    Button btn_login, btn_view_register;
+    Button btn_login, btn_view_register, btn_anonymous;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
 
@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         btn_login = findViewById(R.id.btn_iniciar_sesion);
         btn_view_register = findViewById(R.id.btn_view_registrarse);
+        btn_anonymous = findViewById(R.id.btn_invitado_login);
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,14 +52,38 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-       btn_view_register.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent intent=new Intent(view.getContext(),RegisterActivity.class);
-               startActivity(intent);
-           }
-       });
+        btn_view_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        btn_anonymous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginAnonymous();
+            }
+        });
+
+    }
+
+    private void loginAnonymous() {
+        mAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(LoginActivity.this, "Error al acceder", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loginUser(String emailUser, String passwordUser) {
