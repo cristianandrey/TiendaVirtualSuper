@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="true"
+    android:layout_gravity="start|left"
+
+    app:layout_anchorGravity="start|left"
+    android:gravity="center|left"
+    tools:context=".MenuLateralFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start|left"
+        android:gravity="center|left"
+        android:foregroundGravity="left">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start|left"
+            android:gravity="start|left"
+            android:orientation="vertical"
+            android:textAlignment="viewStart">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_close_24" />
+
+                <Button
+                    android:id="@+id/btn_view_registrarse"
+                    style="@android:style/Widget.Button.Inset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:text="Cerrar Sección"
+                    android:textColor="#F85F6A" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 
 import com.example.tiendavirtual.adapter.AdapterProduct;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btn_add = findViewById(R.id.btn_agregar);
         btn_add_fragment = findViewById(R.id.btn_add_fragment);
         btn_exit = findViewById(R.id.btn_close);
+
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override

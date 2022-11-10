@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -21,9 +22,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
     EditText email, password;
-    Button btn_login, btn_view_register, btn_anonymous;
+    Button btn_login, btn_view_register, btn_anonymous,btn_google;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
+
+    //services de google
+
+    GoogleSignInClient googleSignInClient;
 
 
     @Override
@@ -37,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_login = findViewById(R.id.btn_iniciar_sesion);
         btn_view_register = findViewById(R.id.btn_view_registrarse);
         btn_anonymous = findViewById(R.id.btn_invitado_login);
+        btn_google=findViewById(R.id.btn_google_login);
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +72,13 @@ public class LoginActivity extends AppCompatActivity {
                 loginAnonymous();
             }
         });
+
+       /* btn_google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });*/
 
     }
 
@@ -112,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, Home_Activity.class));
             finish();
         }
     }
