@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 
 import com.example.tiendavirtual.adapter.AdapterProduct;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     AdapterProduct mAdapter;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
+    SearchView search_view;
+
 
 
     @Override
@@ -47,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         btn_add = findViewById(R.id.btn_agregar);
         btn_add_fragment = findViewById(R.id.btn_add_fragment);
         btn_exit = findViewById(R.id.btn_close);
+
+        search_view= findViewById(R.id.search);
+        
+        search_view();
+        
 
 
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +82,25 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
+    }
+
+    private void search_view() {
+        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                textSearch(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                textSearch(s);
+                return false;
+            }
+        });
+    }
+
+    private void textSearch(String s) {
     }
 
 
