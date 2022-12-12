@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,58 +22,44 @@ import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
 
+
     Button btn_add, btn_add_fragment, btn_exit;
-    RecyclerView mRecycler;
     AdapterProduct mAdapter;
+    RecyclerView mRecycler;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
     SearchView search_view;
+    Query query;
 
-
-
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        search_view = findViewById(R.id.search);
 
-        mRecycler = findViewById(R.id.recyclerViewSingle);
-        mRecycler.setLayoutManager(new LinearLayoutManager(this));
-        Query query = mFirestore.collection("productos");
-
-
-        FirestoreRecyclerOptions<Producto> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Producto>().setQuery(query, Producto.class).build();
-        mAdapter = new AdapterProduct(firestoreRecyclerOptions, this, getSupportFragmentManager());
-        mAdapter.notifyDataSetChanged();
-        mRecycler.setAdapter(mAdapter);
-
-        btn_add = findViewById(R.id.btn_agregar);
+        btn_add = findViewById(R.id.btn_add);
         btn_add_fragment = findViewById(R.id.btn_add_fragment);
         btn_exit = findViewById(R.id.btn_close);
 
-        search_view= findViewById(R.id.search);
-        
-        search_view();
-        
-
-
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, CreateProductActivity.class));
-
             }
         });
 
-        //boton agregar con fragmento
-        btn_add_fragment.setOnClickListener(new View.OnClickListener() {
+        /*btn_add_fragment.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                CreateProductoFragment fn = new CreateProductoFragment();
-                fn.show(getSupportFragmentManager(), "Navegar a fragmento");
+            public void onClick(View v) {
+                CreatePetFragment fm = new CreatePetFragment();
+                fm.show(getSupportFragmentManager(), "Navegar a fragment");
             }
-        });
+        });*/
+
 
         btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,25 +69,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
+
+        setUpRecyclerView();
     }
 
-    private void search_view() {
-        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                textSearch(s);
-                return false;
-            }
+    @SuppressLint("NotifyDataSetChanged")
+    private void setUpRecyclerView() {
+        mRecycler = findViewById(R.id.recyclerViewSingle);
+        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+//      Query query = mFirestore.collection("pet").whereEqualTo("id_user", mAuth.getCurrentUser().getUid());
+        query = mFirestore.collection("productos");
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                textSearch(s);
-                return false;
-            }
-        });
-    }
+        FirestoreRecyclerOptions<Producto> firestoreRecyclerOptions =
+                new FirestoreRecyclerOptions.Builder<Producto>().setQuery(query, Producto.class).build();
 
-    private void textSearch(String s) {
+        mAdapter = new AdapterProduct(firestoreRecyclerOptions, this, getSupportFragmentManager());
+        mAdapter.notifyDataSetChanged();
+        mRecycler.setAdapter(mAdapter);
     }
 
 

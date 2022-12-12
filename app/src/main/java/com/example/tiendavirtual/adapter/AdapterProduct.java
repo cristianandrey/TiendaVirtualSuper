@@ -2,7 +2,7 @@ package com.example.tiendavirtual.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tiendavirtual.CreateProductActivity;
-import com.example.tiendavirtual.CreateProductoFragment;
 import com.example.tiendavirtual.R;
 import com.example.tiendavirtual.modelo.Producto;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -24,18 +23,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import java.text.DecimalFormat;
 
 public class AdapterProduct extends FirestoreRecyclerAdapter<Producto, AdapterProduct.ViewHolder> {
-    private FirebaseFirestore mFirebase = FirebaseFirestore.getInstance();
+
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     Activity activity;
     FragmentManager fm;
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
     public AdapterProduct(@NonNull FirestoreRecyclerOptions<Producto> options, Activity activity, FragmentManager fm) {
         super(options);
         this.activity = activity;
@@ -43,74 +40,80 @@ public class AdapterProduct extends FirestoreRecyclerAdapter<Producto, AdapterPr
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull AdapterProduct.ViewHolder holder, int position, @NonNull Producto model) {
-        holder.name.setText(model.getName());
-        //viewHolder.description.setText(Product.getDescription());
-        holder.price.setText(model.getPrice());
+    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Producto producto) {
 
-
-        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition());
+        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(viewHolder.getBindingAdapterPosition());
         final String id = documentSnapshot.getId();
-        holder.btn_delete.setOnClickListener(new View.OnClickListener() {
+
+        viewHolder.name.setText(producto.getNombre());
+        viewHolder.descripcion.setText(producto.getDescripcion());
+        viewHolder.product_price.setText("$ "+producto.getProducto_price());
+        String photoProd = producto.getPhoto();
+        try {
+            if (!photoProd.equals(""))
+                Picasso.with(activity.getApplicationContext())
+                        .load(photoProd)
+                        .resize(150, 150)
+                        .into(viewHolder.photo_Prod);
+        } catch (Exception e) {
+            Log.d("Exception", "e: " + e);
+        }
+
+        viewHolder.btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                deleteProduct(id);
+            public void onClick(View v) {
+//          SEND DATA ACTIVITY
+                Intent i = new Intent(activity, CreateProductActivity.class);
+                i.putExtra("id_producto", id);
+                activity.startActivity(i);
+
+
             }
-
-
         });
 
-        holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(activity, CreateProductActivity.class);
-                i.putExtra("id_product", id);
-                //activity.startActivity(i);
-
-                //send data fragment
-
-                CreateProductoFragment createProductoFragment=new CreateProductoFragment();
-                Bundle bundle =new Bundle();
-                bundle.putString("id_product",id);
-                createProductoFragment.setArguments(bundle);
-                createProductoFragment.show(fm,"Open Fragment");
+            public void onClick(View v) {
+                deleteProducto(id);
             }
         });
     }
 
-    private void deleteProduct(String id) {
-        mFirebase.collection("productos").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+    private void deleteProducto(String id) {
+        mFirestore.collection("productos").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(activity, "Eliminado con exito!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Eliminado correctamente", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(activity, "Error al eliminar!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Error al eliminar", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @NonNull
     @Override
-    public AdapterProduct.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_product_single, parent, false);
-        return new AdapterProduct.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price;
-        ImageView btn_delete, btn_edit;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView name, descripcion, product_price;
+        ImageView btn_delete, btn_edit, photo_Prod;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.nombre);
-            //description = itemView.findViewById(R.id.descripcion_producto);
-            price = itemView.findViewById(R.id.precio);
+
+            name = itemView.findViewById(R.id.nombre_s);
+            descripcion = itemView.findViewById(R.id.descripcion_s);
+            product_price = itemView.findViewById(R.id.precio_producto_s);
+
+            photo_Prod = itemView.findViewById(R.id.photo);
             btn_delete = itemView.findViewById(R.id.btn_eliminar);
             btn_edit = itemView.findViewById(R.id.btn_editar);
-
         }
     }
 }

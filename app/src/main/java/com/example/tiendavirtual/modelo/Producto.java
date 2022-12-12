@@ -1,43 +1,47 @@
 package com.example.tiendavirtual.modelo;
 
 public class Producto {
-    String name, description, price;
+    String nombre, descripcion, producto_price, photo;
 
     public Producto() {
     }
 
-    public Producto(String name, String price) {
-        this.name = name;
-        this.price = price;
+    public Producto(String nombre, String descripcion, String producto_price, String photo) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.producto_price = producto_price;
+        this.photo = photo;
     }
 
-    public Producto(String name, String description, String price) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
+    public String getPhoto() {
+        return photo;
     }
 
-    public String getName() {
-        return name;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getDescription() {
-        return description;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public String getPrice() {
-        return price;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public String getProducto_price() {
+        return producto_price;
+    }
+
+    public void setProducto_price(String producto_price) {
+        this.producto_price = producto_price;
     }
 }
